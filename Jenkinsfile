@@ -1,10 +1,10 @@
 pipeline {
     agent any
     stages {
-        stage('Build') { 
+        stage('Build') {
             steps {
                 sh 'rm -rf build'
-                sh 'cmake -B build -S .' 
+                sh 'cmake -B build -S .'
                 sh 'cmake --build build'
             }
         }
@@ -14,7 +14,12 @@ pipeline {
                 sh './build/test_game'
             }
         }
-
-
+        stage('Deliver') { 
+            steps {
+                sh 'tar -czf casino_game.tar.gz build/casino_game' 
+                archiveArtifacts artifacts: 'casino_game.tar.gz', fingerprint: true 
+            }
+        }
     }
 }
+
